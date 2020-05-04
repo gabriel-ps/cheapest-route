@@ -9,16 +9,49 @@ class CheapestRouteResolver
 {
     public function resolve(Location $origin, Location $destination)
     {
-        /*$destinations = $origin->getDestinations();
+        $routes = $this->getPossibleRoutes($origin, $destination);
 
-        foreach ($destinations as $destination) {
-            # code...
+        if (empty($routes)) {
+            // No possible route
+            return null;
         }
 
-        while (!in_array($destination, $destinations)) {
-            $this->resolve();
-        }*/
-        $routes = $this->getPossibleRoutes($origin, $destination);
+        if (count($routes) === 1) {
+            // If there is only one route, it is the cheapest
+            return $routes[0];
+        }
+
+        return $this->getCheapestRoute($routes);
+    }
+
+    private function getCheapestRoute(array $routes)
+    {
+        $minimunCost = $routes[0]->getCost();
+        $minimunCostIndex = 0;
+
+        for ($i = 1; $i < count($routes); $i++) {
+            $route = $routes[$i];
+
+            if ($route->getCost() < $minimunCost) {
+                $minimunCost = $route->getCost();
+                $minimunCostIndex = $i;
+            }
+        }
+
+        return $routes[$minimunCostIndex];
+        /*
+        $minimunCost = INF;
+        $minimunCostIndex = 0;
+
+        foreach ($routes as $i => $route) {
+            if ($route->getCost() < $minimunCost) {
+                $minimunCost = $route->getCost();
+                $minimunCostIndex = $i;
+            }
+        }
+
+        return $routes[$minimunCostIndex];
+        */
     }
 
     public function getPossibleRoutes($origin, Location $finalDestination, $accumulatedDestinations = []) : array
@@ -52,11 +85,5 @@ class CheapestRouteResolver
         }
 
         return $routes;
-    }
-
-    private function newRoute($routePrefix, $destination)
-    {
-        $routePrefix[] = $destination;
-        return $route;
     }
 }

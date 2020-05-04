@@ -73,4 +73,55 @@ class CheapestRouteResolverTest extends TestCase
         $this->assertEquals($routes[2]->fullPath(), 'gru,orl');
         $this->assertEquals($routes[2]->getCost(), 56);
     }
+
+    /**
+     * @test
+     */
+    public function it_resolves_cheapest_route()
+    {
+        $gru = new Location('gru');
+        $slc = new Location('slc');
+        $brc = new Location('brc');
+        $orl = new Location('orl');
+        $cdg = new Location('cdg');
+
+        $gru->setDestinations([
+            new Destination($brc, 10),
+            new Destination($slc, 18),
+            new Destination($orl, 56),
+            new Destination($cdg, 75)
+        ]);
+
+        $slc->setDestinations([
+            new Destination($orl, 20),
+        ]);
+
+        $brc->setDestinations([
+            new Destination($slc, 5),
+        ]);
+
+        $orl->setDestinations([
+            new Destination($cdg, 5),
+        ]);
+
+        $routeResolver = new CheapestRouteResolver();
+
+
+        $route = $routeResolver->resolve($gru, $slc);
+
+        $this->assertEquals($route->fullPath(), 'gru,brc,slc');
+        $this->assertEquals($route->getCost(), 15);
+
+
+        $route = $routeResolver->resolve($gru, $orl);
+
+        $this->assertEquals($route->fullPath(), 'gru,brc,slc,orl');
+        $this->assertEquals($route->getCost(), 35);
+
+
+        $route = $routeResolver->resolve($orl, $gru);
+
+        // No possible route
+        $this->assertEquals($route, null);
+    }
 }
