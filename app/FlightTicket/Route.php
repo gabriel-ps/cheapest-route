@@ -69,4 +69,12 @@ class Route
 
         return trim($fullPath, ',');
     }
+
+    public function toArray()
+    {
+        return [
+            'route' => $this->fullPath(),
+            'price' => $this->getCost()
+        ];
+    }
 }
