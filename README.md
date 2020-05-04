@@ -1,4 +1,5 @@
 
+
 ## Installation
 
 Development environment requirements :
@@ -38,3 +39,15 @@ Returns the cheapest route from origin to destination
 ### POST /route
 
 Stores a new route
+
+## Run tests with PHPUnit
+```bash
+# Global phpunit installation
+phpunit
+
+# Local installation - Linux/Mac
+./vendor/bin/phpunit
+
+# Local installation - Windows
+.\vendor\bin\phpunit
+```
