@@ -1,5 +1,7 @@
 <?php
 
+namespace App\FlightTicket;
+
 /**
  *
  */
@@ -50,6 +52,13 @@ class Location
     public function setDestinations($destinations)
     {
         $this->destinations = $destinations;
+
+        return $this;
+    }
+
+    public function addDestination($destination)
+    {
+        $this->destinations[] = $destination;
 
         return $this;
     }
