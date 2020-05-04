@@ -14,3 +14,4 @@
 */
 
 $router->get('/quote/{origin}/{destination}', 'RoutesController@findCheapestRotue');
+$router->post('/route', 'RoutesController@store');

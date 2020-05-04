@@ -9,6 +9,7 @@ class RoutesController extends Controller
 {
     protected $locationsRepo;
     protected $routeResolver;
+    protected $fileName = 'routes.csv';
 
     /**
      * Create a new controller instance.
@@ -23,7 +24,7 @@ class RoutesController extends Controller
 
     public function findCheapestRotue($origin, $destination)
     {
-        $locationsGraph = $this->locationsRepo->getAll('routes.csv');
+        $locationsGraph = $this->locationsRepo->getAll($this->fileName);
 
         if (!isset($locationsGraph[$origin])) {
             abort(404);
@@ -39,5 +40,18 @@ class RoutesController extends Controller
         }
 
         return $route->toArray();
+    }
+
+    public function store()
+    {
+        $request = request();
+
+        $data = $this->validate($request, [
+            'from' => 'required',
+            'to' => 'required',
+            'price' => 'required|numeric'
+        ]);
+
+        $this->locationsRepo->insert($this->fileName, $data);
     }
 }

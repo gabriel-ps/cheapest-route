@@ -43,4 +43,13 @@ class LocationsRepository
 
         return $locations;
     }
+
+    public function insert($fileName, $data)
+    {
+        $edges = $this->loadFromCsv($fileName);
+
+        $f = fopen(storage_path('app/' . $fileName), 'a');
+        fwrite($f, PHP_EOL . implode(',', $data));
+        fclose($f);
+    }
 }
